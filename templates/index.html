@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="useless website" content="pls help me">
+
+        <title>Form Thing idk</title>
+        <link rel="icon" href="https://media.discordapp.net/attachments/937968846671855639/1017129307119816805/unknown_32sss.png">
+    </head>
+
+    <body>
+        <div class="formbox">
+            <form id="form" method="post">
+                <label>Name:</label>
+                <input type="text" name="tNM" placeholder="Not real name" required>
+                <br>
+                <label>Say Something:</label>
+                <input type="text" name="tTXT" placeholder="ex: I eat clay" required>
+                <input type="submit" value="Submit">
+            </form>
+
+            <div class="submitted">
+                {% for name, value in submitted %}
+                    <h1>{{ name }}: {{ value }}</h1> 
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+
+    <style>
+        html {
+            background-color: rgb(226, 95, 95);
+        }
+
+        @keyframes formbox {
+            0% {
+                bottom: -10000px;
+            }
+            100% {
+                bottom: 0px;
+            }
+        }
+
+        .formbox {
+            position: relative;
+            margin: auto;
+            width: 50%;
+            background-color: white;
+            border: 3px solid rgb(0, 0, 0);
+            padding: 10px;
+
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+
+            animation-name: formbox;
+            animation-duration: 1s;
+        }
+
+        .submitted {
+            font-size: 0.5em;
+        }
+    </style>
+</html>
