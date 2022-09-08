@@ -11,7 +11,7 @@ def form():
         submitted.append([[str(name)], [str(text)]])
         return render_template("index.html", submitted=submitted)
     else:
-        return render_template("index.html")
+        return render_template("index.html", submitted=submitted)
 
 if __name__ == '__main__':
     app.run(debug=True)
