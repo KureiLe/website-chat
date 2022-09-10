@@ -3,60 +3,155 @@
         <meta charset="UTF-8">
         <meta name="useless website" content="pls help me">
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.2/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
         <title>Form Thing idk</title>
         <link rel="icon" href="https://media.discordapp.net/attachments/937968846671855639/1017129307119816805/unknown_32sss.png">
     </head>
 
     <body>
-        <div class="formbox">
-            <form id="form" method="post">
-                <label>Name:</label>
-                <input type="text" name="tNM" placeholder="Not real name" required>
-                <br>
-                <label>Say Something:</label>
-                <input type="text" name="tTXT" placeholder="ex: I eat clay" required>
-                <input type="submit" value="Submit">
-            </form>
+        <div class="flex-container1" ">
 
-            <div class="submitted">
-                {% for name, value in submitted %}
-                    <h1>{{ name }}: {{ value }}</h1> 
-                {% endfor %}
+            <div id="messages">
             </div>
+
+            <div class="form-box">
+                <form id="form" method="post">
+
+                    <div class="flex-container2">
+                        <div class="username">
+                            <input type="text" id="username" placeholder="Not real name" required>
+                        </div>
+
+                        <div class="message">
+                            <input type="text" id="message" placeholder="ex: I eat clay" required>
+                        </div>
+
+                        <div class="sendbtn">
+                            <input type="submit" id="sendbtn" value="send">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
         </div>
     </body>
 
+
     <style>
         html {
-            background-color: rgb(226, 95, 95);
+            background-color: rgb(57, 57, 57);
         }
 
-        @keyframes formbox {
-            0% {
-                bottom: -10000px;
-            }
-            100% {
-                bottom: 0px;
-            }
+        .flex-container1 {
+            display: flex;
+            flex-direction: column;
+
+            position: absolute;
+            max-height: 100%;
+            width: 99%;
+
+            bottom: 0px;
+
+            color: white;
         }
 
-        .formbox {
+        #messages {
             position: relative;
-            margin: auto;
-            width: 50%;
-            background-color: white;
-            border: 3px solid rgb(0, 0, 0);
-            padding: 10px;
+            max-height: 100%;
+            flex-grow: 15; 
+            bottom: 3px;
+
+            width: 100%;
+
+            background-color: rgb(80, 80, 80);
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+
+            overflow: auto;
+            scroll-behavior: smooth;
+        }
+
+        .form-box {
+            position: relative;
+            flex-grow: 1; 
+
+            width: 100%;
 
             text-align: center;
             font-family: 'Courier New', Courier, monospace;
-
-            animation-name: formbox;
-            animation-duration: 1s;
         }
 
-        .submitted {
-            font-size: 0.5em;
+        .flex-container2 {
+            display: flex;
+            flex-direction: row;
+
+            position: relative;
+            width: 100%;
+        }
+        .username {
+            flex-grow: 1;
+        }
+        .message {
+            flex-grow: 10;
+        }
+        .sendbtn {
+            flex-grow: 1;
+        }
+
+        input {
+            width: 100%;
+            height: 100%;
+
+            color: white;
+            background-color: rgb(81, 81, 81);
+            border: none;
+        }
+        input:hover {
+            background-color: rgb(65, 65, 65);
+        }
+
+        #alert {
+            color: rgb(170, 197, 51)
         }
     </style>
+
+    <script>
+        $(document).ready(function() {
+            var socket = io.connect('https://uselessweb.pythonanywhere.com');
+
+            socket.on('connect', function() {
+                socket.send("someone connected!");
+            });
+
+            socket.on('message', function(data) {
+                $('#messages').append($('<h4>').text(data));
+            });
+
+            $('#sendbtn').on('click', function() {
+                if (!$('#username').val() || !$('#message').val()) {
+                    $('#messages').append($('<h5 id="alert">').text("Fill the required fields"));
+                    
+                    let messagesID = document.getElementById('messages');
+                    messagesID.scrollTop = messagesID.scrollHeight
+                } else {
+                    socket.send($('#username').val() + ": " + $('#message').val());
+
+                    $('#message').val(null);
+                    let messagesID = document.getElementById('messages');
+                    messagesID.scrollTop = messagesID.scrollHeight
+                };
+            });
+
+
+            document.addEventListener('invalid', (function () {
+                return function (e) {
+                    e.preventDefault();
+                    document.getElementById("message").focus();
+                };
+            })(), true);
+        });
+    </script>
 </html>
