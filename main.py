@@ -15,4 +15,4 @@ def index():
     return render_template("index.html")
 
 if __name__ == '__main__':
-    socket.run(app, host="https://uselessweb.herokuapp.com:5000/")
+    socket.run(app, host="uselessweb.herokuapp.com")
