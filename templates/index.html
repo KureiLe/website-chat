@@ -120,7 +120,7 @@
 
     <script>
         $(document).ready(function() {
-            var socket = io.connect('ws://uselessweb.herokuapp.com');
+            var socket = io.connect('ws://uselessweb.herokuapp.com:80');
 
             socket.on('connect', function() {
                 socket.send("someone connected!");
