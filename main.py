@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, send
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "fhkjdshfsadkfhsdfhjklqfhjdkshflkjadfhajkdfhjksadjhfkaslfhakhdjk"
-socket = SocketIO(app, cors_allowed_origins="*")
+socket = SocketIO(app, cors_allowed_origins=['https://uselessweb.herokuapp.com/'])
 
 @socket.on("message")
 def handle_message(message):
