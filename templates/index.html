@@ -12,6 +12,9 @@
 
     <body>
         <div class="flex-container1" ">
+            <div class="users">
+                <h3 id="users">Web has been opened ... times</h3>
+            </div>
 
             <div id="messages">
             </div>
@@ -57,23 +60,27 @@
 
             color: white;
         }
-
+        .users {
+            flex-grow: 1;
+            width: fit-content;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         #messages {
             position: relative;
             max-height: 100%;
-            flex-grow: 15; 
+            flex-grow: 8; 
             bottom: 3px;
 
             width: 100%;
+            word-break: break-all;
 
             background-color: rgb(80, 80, 80);
             border-radius: 5px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
             overflow: auto;
             scroll-behavior: smooth;
         }
-
         .form-box {
             position: relative;
             flex-grow: 1; 
@@ -90,6 +97,7 @@
 
             position: relative;
             width: 100%;
+            border-radius: 20%;
         }
         .username {
             flex-grow: 1;
@@ -99,6 +107,9 @@
         }
         .sendbtn {
             flex-grow: 1;
+            height: 30px;
+
+            text-align: center;
         }
 
         input {
@@ -107,6 +118,7 @@
 
             color: white;
             background-color: rgb(81, 81, 81);
+
             border: none;
         }
         input:hover {
@@ -120,14 +132,23 @@
 
     <script>
         $(document).ready(function() {
-            var socket = io.connect('ws://uselessweb.herokuapp.com:80');
+            const socket = io.connect('ws://118.137.243.12:1209');
 
             socket.on('connect', function() {
-                socket.send("someone connected!");
+                var data = {"type": "connect"};
+                socket.send(data);
             });
 
             socket.on('message', function(data) {
-                $('#messages').append($('<h4>').text(data));
+                if (data["type"] == "form_submit") {
+                    $('#messages').append($('<h4>').text(data["value"]));
+                    let messagesID = document.getElementById('messages');
+                    messagesID.scrollTop = messagesID.scrollHeight;
+                };
+                
+                if (data["type"] == "user") {
+                    $('#users').text("Web has been opened " + data["users"]+ " times");
+                };
             });
 
             $('#sendbtn').on('click', function() {
@@ -135,13 +156,14 @@
                     $('#messages').append($('<h5 id="alert">').text("Fill the required fields"));
                     
                     let messagesID = document.getElementById('messages');
-                    messagesID.scrollTop = messagesID.scrollHeight
+                    messagesID.scrollTop = messagesID.scrollHeight;
                 } else {
-                    socket.send($('#username').val() + ": " + $('#message').val());
+                    var dataPost = {"type": "form_submit", "value": $('#username').val() + ": " + $('#message').val()}
+                    socket.send(dataPost);
 
                     $('#message').val(null);
                     let messagesID = document.getElementById('messages');
-                    messagesID.scrollTop = messagesID.scrollHeight
+                    messagesID.scrollTop = messagesID.scrollHeight;
                 };
             });
 
