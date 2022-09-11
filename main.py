@@ -15,4 +15,4 @@ def index():
     return render_template("index.html")
 
 if __name__ == '__main__':
-    socket.run(app, port=5004, debug=True)
+    socket.run(app, debug=True)
